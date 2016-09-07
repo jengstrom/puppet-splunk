@@ -3,7 +3,7 @@
 # == Class: splunk
 #
 # The Splunk class takes are of installing and configuring a Splunk instance
-# based on the provided parameters. 
+# based on the provided parameters.
 
 class splunk (
   $type         = $splunk::params::type,
@@ -11,6 +11,7 @@ class splunk (
   $splunk_bindip    = $splunk::params::splunk_bindip,
   $lm           = $splunk::params::lm,
   $ds           = $splunk::params::ds,
+  $webssl       = $splunk::params::webssl,
   $sslcompatibility = $splunk::params::sslcompatibility,
   $ciphersuite_modern  = $splunk::params::ciphersuite_modern,
   $sslversions_modern  = $splunk::params::sslversions_modern,
@@ -68,7 +69,7 @@ class splunk (
   if $shclustering[mode] == 'searchhead' {
     # for SHC nodes we only place bootstrap config, so make
     # sure that staging directories end up using default dir
-    # instead of local, and don't replace any existing config 
+    # instead of local, and don't replace any existing config
     $splunk_app_precedence_dir = 'default'
     $splunk_app_replace = false
   } else {
@@ -121,4 +122,3 @@ class splunk (
 # 1) 10-18-2015 17:04:22.364 +0200 WARN  main - The hard fd limit is lower than
 # the recommended value. The hard limit is '4096' The recommended value is
 # '64000'.
-
