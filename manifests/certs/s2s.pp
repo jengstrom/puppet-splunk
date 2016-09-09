@@ -29,27 +29,28 @@ class splunk::certs::s2s (
     path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
     creates => [ "${splunk_home}/etc/auth/certs/ca.crt", ],
     require => File["${splunk_home}/etc/auth/certs"],
-    onlyif  => '/usr/bin/test -e /etc/puppet/ssl'
+    onlyif  => '/usr/bin/test -e /etc/puppetlabs/ssl'
   } ->
   exec { 'openssl s2s 1 opensource puppet':
-    command => "cat /etc/puppet/ssl/private_keys/${::fqdn}.pem /etc/puppet/ssl/certs/${::fqdn}.pem > ${splunk_home}/etc/auth/certs/s2s.pem",
+    command => "cat /etc/puppet/ssl/private_keys/${::fqdn}.pem /etc/puppetlabs/ssl/certs/${::fqdn}.pem > ${splunk_home}/etc/auth/certs/s2s.pem",
     path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
     creates => [ "${splunk_home}/etc/auth/certs/s2s.pem", ],
+    require => Exec["openssl s2s ca opensource puppet"],
+    onlyif  => '/usr/bin/test -e /etc/puppetlabs/ssl'
   }
 
   # reuse certs from commercial Puppet
   exec { 'openssl s2s ca commercial puppet':
-    command => "cat /etc/puppetlabs/puppet/ssl/certs/ca.pem > ${splunk_home}/etc/auth/certs/ca.crt",
+    command => "cat /etc/puppetlabslabs/puppet/ssl/certs/ca.pem > ${splunk_home}/etc/auth/certs/ca.crt",
     path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
     creates => [ "${splunk_home}/etc/auth/certs/ca.crt", ],
     require => File["${splunk_home}/etc/auth/certs"],
-    onlyif  => '/usr/bin/test -e /etc/puppetlabs/puppet/ssl'
+    onlyif  => '/usr/bin/test -e /etc/puppetlabslabs/puppet/ssl'
   } ->
   exec { 'openssl s2s 1 commercial puppet':
-    command => "cat /etc/puppetlabs/puppet/ssl/private_keys/${::fqdn}.pem /etc/puppetlabs/puppet/ssl/certs/${::fqdn}.pem > ${splunk_home}/etc/auth/certs/s2s.pem",
+    command => "cat /etc/puppetlabslabs/puppet/ssl/private_keys/${::fqdn}.pem /etc/puppetlabslabs/puppet/ssl/certs/${::fqdn}.pem > ${splunk_home}/etc/auth/certs/s2s.pem",
     path    => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
     creates => [ "${splunk_home}/etc/auth/certs/s2s.pem", ],
   }
 
 }
-
